@@ -1,0 +1,81 @@
+<project name="DistributedCalculation" default="compile">
+
+	<property file="build.properties" />
+	<property name="srcDir" value="src" />
+	<property name="classDir" value="classes" />
+	<property name="libDir" value="lib" />
+	<property name="nativeLibDir" value="${libDir}/${os}/${arch}" />
+	<property name="jarDir" value="jar" />
+	<property name="package" value="jp/ac/titech/cs/archaeo/java/DistributedCalculation" />
+
+	<!-- ***** ClassPath ***** -->
+	<path id="base.classpath">
+		<pathelement path="${classDir}" />
+		<fileset dir="${libDir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<!-- ***** Prepare Target ***** -->
+	<target name="prepare">
+		<mkdir dir="${classDir}" />
+	</target>
+
+	<!-- ***** Resource Target ***** -->
+	<target name="resource">
+		<propertyfile file="${srcDir}/${package}/common/resource/buildNo.properties">
+			<entry key="buildNo" type="date" value="now" pattern="yyyyMMddHHmmss" />
+		</propertyfile>
+	</target>
+
+	<!-- ***** Copy Target ***** -->
+	<target name="copy">
+		<copy todir="${classDir}/${package}/common/resource">
+			<fileset dir="${srcDir}/${package}/common/resource">
+				<include name="*.properties" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- ***** Compile Target ***** -->
+	<target name="compile" depends="clean, prepare, resource, copy">
+		<javac srcdir="${srcDir}" destdir="${classDir}" debug="on" includeantruntime="false">
+			<classpath refid="base.classpath" />
+			<compilerarg line="-Xlint:unchecked" />
+		</javac>
+	</target>
+
+	<!-- ***** Clean Target ***** -->
+	<target name="clean">
+		<delete dir="${classDir}" />
+	</target>
+
+	<!-- ***** NativeCompile Target ***** -->
+	<target name="nativeCompile">
+		<javah class="jp.ac.titech.cs.archaeo.java.DistributedCalculation.common.task.DCBPTask" outputfile="${libDir}/${os}/${arch}/DCBPTask.h">
+			<classpath refid="base.classpath" />
+		</javah>
+	</target>
+
+	<!-- ***** runClient Target ***** -->
+	<target name="runClient" depends="compile">
+		<java classname="jp.ac.titech.cs.archaeo.java.DistributedCalculation.client.ClientMain" fork="true">
+			<classpath refid="base.classpath" />
+			<arg value="-a192.168.1.7" />
+		</java>
+	</target>
+
+	<!-- ***** runServer Target ***** -->
+	<target name="runServer" depends="compile">
+		<java classname="jp.ac.titech.cs.archaeo.java.DistributedCalculation.server.ServerMain" fork="true">
+			<classpath refid="base.classpath" />
+			<jvmarg value="-server" />
+			<jvmarg value="-Djava.security.policy=server.policy" />
+		</java>
+	</target>
+
+	<!-- ***** Jar Target ***** -->
+	<target name="jar" depends="compile">
+	</target>
+
+</project>
