@@ -1,0 +1,8 @@
+classes
+bin
+.settings
+.project
+.classpath
+.hg
+CVS
+.svn
