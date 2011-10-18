@@ -1,1 +1,4 @@
+# specify the taskDaemon's ip address
+# e.g.
+# 192.168.0.1
 taskDaemonAddress = 
