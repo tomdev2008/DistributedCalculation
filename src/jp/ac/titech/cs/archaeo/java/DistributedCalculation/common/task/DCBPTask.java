@@ -10,8 +10,6 @@ public final class DCBPTask extends Task<Double[], Double[]> {
 
   @Override
   protected void process() {
-    for (Double data : inputData)
-      System.out.println(data);
   }
 
 }

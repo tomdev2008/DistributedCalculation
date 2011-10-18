@@ -9,6 +9,11 @@ import java.util.List;
 
 public final class RawAsciiDataFileReaader {
 
+  /**
+   * @param inputDataFile
+   * @return Double[nTraces][nSamples]
+   * @throws IOException
+   */
   public static Double[][] read(File inputDataFile) throws IOException {
     List<List<Double>> rawData = new ArrayList<List<Double>>();
     BufferedReader br = new BufferedReader(new FileReader(inputDataFile));

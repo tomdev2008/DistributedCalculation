@@ -8,9 +8,9 @@ public abstract class Task<InputDataType, ResultDataType> implements
     Callable<Long>, Serializable {
 
   private static final long serialVersionUID = -9023511989137561830L;
-  
+
   protected InputDataType inputData;
-  
+
   protected ResultDataType resultData;
 
   protected final UID taskUID;
@@ -38,7 +38,6 @@ public abstract class Task<InputDataType, ResultDataType> implements
     return taskUID;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public final boolean equals(Object obj) {
     if (obj instanceof Task) {

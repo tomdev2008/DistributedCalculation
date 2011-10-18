@@ -85,30 +85,30 @@ public final class ClientProfile implements Serializable {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(Object otherClientObj) {
+    if (this == otherClientObj)
       return true;
-    if (obj == null)
+    if (otherClientObj == null)
       return false;
-    if (getClass() != obj.getClass())
+    if (getClass() != otherClientObj.getClass())
       return false;
-    ClientProfile other = (ClientProfile) obj;
-    if (hardwareAddrList == null) {
-      if (other.hardwareAddrList != null)
-        return false;
-    } else if (!hardwareAddrList.equals(other.hardwareAddrList))
+
+    ClientProfile otherClient = (ClientProfile) otherClientObj;
+
+    if (hostName.compareToIgnoreCase(otherClient.hostName) != 0)
       return false;
-    if (hostName == null) {
-      if (other.hostName != null)
-        return false;
-    } else if (!hostName.equals(other.hostName))
+
+    if (inetAddr.compareToIgnoreCase(otherClient.inetAddr) != 0)
       return false;
-    if (inetAddr == null) {
-      if (other.inetAddr != null)
-        return false;
-    } else if (!inetAddr.equals(other.inetAddr))
-      return false;
-    return true;
+
+    for (String hardwareAddr : hardwareAddrList) {
+      for (String otherClientHardwareAddr : otherClient.hardwareAddrList) {
+        if (hardwareAddr.compareToIgnoreCase(otherClientHardwareAddr) == 0) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
 }

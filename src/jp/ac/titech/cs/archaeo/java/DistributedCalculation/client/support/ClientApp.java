@@ -24,6 +24,7 @@ import jp.ac.titech.cs.archaeo.java.DistributedCalculation.common.resource.Resou
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
@@ -65,7 +66,7 @@ public final class ClientApp {
   private List<String> hardwareAddrList;
 
   private String inetAddr;
-  
+
   private ExecutorService autoTaskExecutorService;
 
   private Future<?> autoTaskExecutorHandle;
@@ -76,7 +77,7 @@ public final class ClientApp {
 
   static {
     cliOptions = new Options();
-    cliOptions.addOption("a", "serverAddress", true,
+    cliOptions.addOption("ad", "taskDaemonAddress", true,
         "input task daemon's ip address");
   }
 
@@ -133,11 +134,11 @@ public final class ClientApp {
       e.printStackTrace();
       System.exit(1);
     }
-    if (!cli.hasOption("a")) {
+    if (!cli.hasOption("ad")) {
       logger.error("invalid arguments. Exit program immediately...");
       System.exit(1);
     }
-    serverInetAddr = cli.getOptionValue("a");
+    serverInetAddr = cli.getOptionValue("ad");
     server = new RMIRequester(serverInetAddr);
     start();
   }

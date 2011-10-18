@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.rmi.server.UID;
 import java.util.List;
 import java.util.Map;
@@ -29,26 +31,9 @@ public final class ServerApp implements ServerInterface {
 
   private final ResourceManager resourceManager;
 
-  private static Properties inputProperties;
+  private final ViewSupport viewSupport;
 
-  static {
-    Logger logger = Utility.getLogger(ServerApp.class);
-    // input properties configure
-    try {
-      File inputPropertiesFile = new File("input.properties");
-      if (inputPropertiesFile.exists()) {
-        inputProperties = new Properties();
-        inputProperties.load(new FileReader(inputPropertiesFile));
-        logger.info("input.properties has read.");
-      }
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-      logger.error(e.getMessage());
-    } catch (IOException e) {
-      e.printStackTrace();
-      logger.error(e.getMessage());
-    }
-  }
+  private static Properties inputProperties;
 
   /**
    * key = client profile UID : UID<br>
@@ -67,27 +52,14 @@ public final class ServerApp implements ServerInterface {
    */
   private Map<UID, List<Task<?, ?>>> currentWorkingTaskListsMap;
 
-  @SuppressWarnings("unchecked")
   public ServerApp() {
     logger = Utility.getLogger(ServerApp.class);
     resourceManager = ResourceManager.getInstance();
+    viewSupport = new ViewSupport();
 
     clientsMap = new ConcurrentHashMap<UID, ClientProfile>();
-    currentWorkingTaskListsMap = new ConcurrentHashMap<UID, List<Task<?, ?>>>();
 
-    try {
-      String taskDistributorClassName = getInputProperties("taskDistributor.className");
-      logger.info("taskDistributorClassName = " + taskDistributorClassName);
-      Class<TaskDistributor<Task<?, ?>>> taskDistributorClass = (Class<TaskDistributor<Task<?, ?>>>) Class
-          .forName(taskDistributorClassName);
-      taskDistributor = taskDistributorClass.newInstance();
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    }
+    startup();
   }
 
   @Override
@@ -157,15 +129,76 @@ public final class ServerApp implements ServerInterface {
     }
   }
 
-  public static String getInputProperties(String key) {
-    ResourceManager resourceManager = ResourceManager.getInstance();
-    String value = "";
-    if (inputProperties.containsKey(key)) {
-      value = inputProperties.getProperty(key);
-    } else {
-      value = resourceManager.getString("default." + key);
+  public void changeNextProcess() {
+    startup();
+  }
+
+  @SuppressWarnings("unchecked")
+  private void startup() {
+    currentWorkingTaskListsMap = new ConcurrentHashMap<UID, List<Task<?, ?>>>();
+
+    readNewInputPorpertiesFile();
+
+    try {
+      String taskDistributorClassName = inputProperties
+          .getProperty("taskDistributor.className");
+      logger.info("taskDistributorClassName = " + taskDistributorClassName);
+      Class<TaskDistributor<Task<?, ?>>> taskDistributorClass = (Class<TaskDistributor<Task<?, ?>>>) Class
+          .forName(taskDistributorClassName);
+      Constructor<TaskDistributor<Task<?, ?>>> constructor = taskDistributorClass
+          .getConstructor(Properties.class);
+      taskDistributor = constructor.newInstance(inputProperties);
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+    } catch (SecurityException e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+    } catch (IllegalArgumentException e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
     }
-    return value;
+  }
+
+  private void readNewInputPorpertiesFile() {
+    File newInputPropertiesFile = viewSupport.getNewInputPropertiesFile();
+
+    // input properties configure
+    try {
+      if (newInputPropertiesFile.exists()) {
+        inputProperties = new Properties();
+        inputProperties.load(new FileReader(newInputPropertiesFile));
+        for (Object key : inputProperties.keySet()) {
+          logger.info("(Key, Value) = (\"" + key + "\", \""
+              + inputProperties.getProperty(key.toString()) + "\")");
+        }
+        logger.info("input.properties has read.");
+      }
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+      System.exit(1);
+    } catch (IOException e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+      System.exit(1);
+    } catch (NullPointerException e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+      System.exit(1);
+    }
   }
 
 }

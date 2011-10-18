@@ -6,3 +6,4 @@ bin
 .hg
 CVS
 .svn
+.DS_Store
