@@ -2,6 +2,7 @@ package jp.ac.titech.cs.archaeo.java.DistributedCalculation.common.task;
 
 import java.io.Serializable;
 import java.rmi.server.UID;
+import java.util.Properties;
 import java.util.concurrent.Callable;
 
 public abstract class Task<InputDataType, ResultDataType> implements
@@ -14,11 +15,14 @@ public abstract class Task<InputDataType, ResultDataType> implements
   protected ResultDataType resultData;
 
   protected final UID taskUID;
+  
+  protected Properties inputProperties;
 
   abstract protected void process();
 
-  public Task(InputDataType inputData) {
+  public Task(Properties inputProperties, InputDataType inputData) {
     taskUID = new UID();
+    this.inputProperties = inputProperties;
     this.inputData = inputData;
     this.resultData = null;
   }

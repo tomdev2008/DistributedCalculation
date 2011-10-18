@@ -51,7 +51,7 @@ public final class DCBPTaskDistributor extends TaskDistributor<DCBPTask> {
     tasksMap = new ConcurrentHashMap<Integer, DCBPTask>();
     for (int traceN = 0; traceN < nTraces; traceN++) {
       taskExecStates[traceN] = TaskExecState.NotExecuted;
-      DCBPTask task = new DCBPTask(inputData[traceN]);
+      DCBPTask task = new DCBPTask(inputProperties, inputData[traceN]);
       tasksMap.put(traceN, task);
     }
   }
