@@ -86,4 +86,13 @@
 	<target name="jar" depends="compile">
 	</target>
 
+	<!-- ***** Test Target ***** -->
+	<target name="testDCBPTask" depends="compile">
+		<java classname="jp.ac.titech.cs.archaeo.java.DistributedCalculation.common.Test.TestDCBPTask"
+		      fork="true">
+			<classpath refid="base.classpath" />
+			<arg value="sample/DecayCorrectionByBeliefPropagation/input.properties" />
+		</java>
+	</target>
+
 </project>

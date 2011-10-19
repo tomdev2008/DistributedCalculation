@@ -111,4 +111,11 @@ public final class ClientProfile implements Serializable {
     return false;
   }
 
+  @Override
+  public String toString() {
+    return "ClientProfile [hostName=" + hostName + ", hardwareAddrList="
+        + hardwareAddrList + ", inetAddr=" + inetAddr + ", loadCapability="
+        + loadCapability + "]";
+  }
+
 }
