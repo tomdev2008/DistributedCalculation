@@ -1,4 +1,4 @@
-package jp.ac.titech.cs.archaeo.java.DistributedCalculation.common.Test;
+package jp.ac.titech.cs.archaeo.java.DistributedCalculation.common.test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
