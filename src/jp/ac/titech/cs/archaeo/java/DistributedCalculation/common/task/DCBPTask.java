@@ -96,6 +96,9 @@ public final class DCBPTask extends Task<Double[], Double[]> {
           }
           messageUpperNumerator[samplingTimeN][p] = upperNumerator;
           messageLowerNumerator[samplingTimeN][p] = lowerNumerator;
+          upperDenominator += upperNumerator;
+          lowerDenominator += lowerNumerator;
+
         }
         messageUpperDenominator[samplingTimeN] = upperDenominator;
         messageLowerDenominator[samplingTimeN] = lowerDenominator;
@@ -112,7 +115,7 @@ public final class DCBPTask extends Task<Double[], Double[]> {
         }
         dse /= (samplingTimeN + 1);
         logger.info("dse = " + dse);
-      }
-    } while (dse > epsilon);
+      } // End of MESSAGE_UPDATE_LOOP
+    } while (dse > epsilon); // End of MESSAGE_CHECK_LOOP
   }
 }
