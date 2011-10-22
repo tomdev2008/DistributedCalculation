@@ -9,7 +9,7 @@ import jp.ac.titech.cs.archaeo.java.DistributedCalculation.common.task.Task;
  */
 public abstract class TaskDistributor<TaskType extends Task<?, ?>> {
 
-  protected Properties inputProperties;
+  protected final Properties inputProperties;
   
   public TaskDistributor(Properties inputProperties) {
     this.inputProperties = inputProperties;

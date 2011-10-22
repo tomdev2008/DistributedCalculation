@@ -11,7 +11,7 @@ public final class DCBPTask extends Task<Double[], Double[]> {
 
   private static final long serialVersionUID = 2620256117378296021L;
 
-  private Logger logger;
+  private final Logger logger;
 
   public DCBPTask(Properties inputProperties, Double[] inputData) {
     super(inputProperties, inputData);
@@ -98,7 +98,6 @@ public final class DCBPTask extends Task<Double[], Double[]> {
           messageLowerNumerator[samplingTimeN][p] = lowerNumerator;
           upperDenominator += upperNumerator;
           lowerDenominator += lowerNumerator;
-
         }
         messageUpperDenominator[samplingTimeN] = upperDenominator;
         messageLowerDenominator[samplingTimeN] = lowerDenominator;

@@ -42,6 +42,7 @@ public abstract class Task<InputDataType, ResultDataType> implements
     return taskUID;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public final boolean equals(Object obj) {
     if (obj instanceof Task) {

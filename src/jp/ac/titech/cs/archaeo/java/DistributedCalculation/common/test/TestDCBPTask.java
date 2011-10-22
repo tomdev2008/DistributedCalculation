@@ -20,9 +20,9 @@ public final class TestDCBPTask {
 
   private DCBPTask task;
 
-  private Logger logger;
+  private final Logger logger;
 
-  private ResourceManager resourceManager;
+  private final ResourceManager resourceManager;
 
   private ExecutorService taskExecutorService;
 
@@ -32,6 +32,7 @@ public final class TestDCBPTask {
 
   public TestDCBPTask(String[] args) {
     logger = Utility.getLogger(TestDCBPTask.class);
+    resourceManager = ResourceManager.getInstance();
     taskExecutorService = Executors.newSingleThreadExecutor();
     String inputPropertiesFileName = args[0];
     Properties inputProperties = new Properties();

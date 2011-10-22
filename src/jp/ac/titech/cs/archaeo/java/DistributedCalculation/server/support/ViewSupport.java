@@ -11,9 +11,9 @@ import org.apache.log4j.Logger;
 
 public final class ViewSupport {
 
-  private Logger logger;
+  private final Logger logger;
 
-  private ResourceManager resourceManager;
+  private final ResourceManager resourceManager;
 
   public ViewSupport() {
     logger = Utility.getLogger(ViewSupport.class);
